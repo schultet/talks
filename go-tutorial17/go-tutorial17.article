@@ -1,0 +1,1143 @@
+Rapid Introduction to Go
+
+12 May 2017
+Tags: Go, golang, go tutorial, introduction, concurrency, interface
+
+Tim Schulte
+Albert-Ludwigs-Universität Freiburg
+schultetp@gmail.com
+
+
+################################################################################
+#-----------------------------------------------------------------------------
+* How to learn a new language from scratch in limited time?
+
+.image img/arrival-heptapod-writing-lego-PD.jpg 550 _
+#.image img/arrival-alien-ship.png 550 _
+#.image img/arrival-communication01.png 500 _
+
+: if you want to learn a new language, it makes sense to start with common features
+: expressing well known concepts
+: things that share characteristics
+: in short: EXPLOITING COMMONALITIES
+: once, a basic understanding has been established
+: this opens us to new possibilities and new ways of doing things
+
+
+#-----------------------------------------------------------------------------
+* Agenda
+
+- Gathering data
+- Entering the ship 
+
+: setting up the Go environment (compiler, tools, ...)
+
+- Session 01: Establishing a basic understanding
+
+: rapid introduction to the fundamentals of Go
+
+- Session 02: Interfaces
+
+- Session 03: Concurrency
+
+
+################################################################################
+* Gathering data
+
+#-----------------------------------------------------------------------------
+* What is Go?
+
+Go is an open-source, general-purpose programming language.
+
+- Compiled 
+- Statically typed 
+- Concurrent 
+- Garbage collected
+- Simple and productive
+
+: builds fast at scale
+: robust standard library
+: multitude of supported platforms
+: tools (build, fetch, test, document, profile, format)
+
+
+#-----------------------------------------------------------------------------
+* What is different?
+
+No classes, no inheritance, no generics
+
+No function overloading, no default values
+
+No exception handling
+
+: No pointer arithmetic
+
+#.image img/weird.jpg _ 350
+
+
+#-----------------------------------------------------------------------------
+* Public reception
+
+.image img/trends.png 530 _
+
+.caption Google Trends for [[https://trends.google.com/trends/explore?date=all&q=golang][golang]]
+
+: Go's popularity
+
+
+
+################################################################################
+* Entering the ship
+
+#* 
+#
+#.image img/arrival-entering-the-ship.jpg 550 _
+
+
+#-------------------------------------------------------------------------------
+* Installing the Go tools
+
+
+Get the archive for your system from [[https://golang.org/doc/install]].
+Extract it somewhere, e.g. `/usr/local`:
+
+ $ tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
+
+: Creating a Go tree in `/usr/local/go`
+
+Export the path and set the `GOROOT` environment variable:
+(You may want to add commands like the following to `$HOME/.profile`)
+
+ $ export GOROOT=/usr/local/go
+ $ export PATH=$PATH:$GOROOT/bin
+
+
+Test your installation
+
+ $ go version
+ $ go env GOROOT
+
+: go version go1.8 linux/amd64
+: GOPATH="/home/tim"
+: GOROOT="/home/tim/go1.8"
+
+ 
+#-------------------------------------------------------------------------------
+* Creating a Workspace
+
+: Go programmers typically keep all their Go code in a single _workspace_
+
+A workspace is a directory hierarchy with three directories at its root:
+
+ gocode/
+ ├── src/  # contains Go source files,
+ ├── pkg/  # contains package objects, and
+ └── bin/  # contains executable commands.
+
+The `go` `tool` builds source packages and installs the resulting binaries to the `pkg` and `bin` directories. 
+
+
+Set the `GOPATH` environment variable to specify the location of your workspace, e.g.:
+
+ $ export GOPATH=$HOME/gocode
+
+: this is the default go workspace
+: The path to a package's directory determines its _import_path_
+: Note that this differs from other programming environments in which every 
+: project has a separate workspace and workspaces are closely tied to version 
+: control repositories.
+
+
+#-------------------------------------------------------------------------------
+* Creating and Running Go Programs
+
+Create a new package directory inside your workspace
+
+ $ mkdir -p $GOPATH/src/github.com/user/hello
+
+Create a file named `hello.go` inside that directory, containing the following Go code
+
+ package main
+
+ import "fmt"
+
+ func main() {
+     fmt.Printf("Why are you here?\n")
+ }
+
+Run the program
+
+ $ go run hello.go
+
+
+################################################################################
+* Session 01: Establishing a basic understanding
+
+#* 
+#
+#.image img/arrival-session01.jpg 550 _
+#
+#: This scene is about learning basic concepts in each others language.
+#: We will have a look at selected go code
+#: It's not necessary that you understand all of the code
+#: You will still learn a lot simply by osmosis
+#: - which is the best way to learn.
+
+
+#-------------------------------------------------------------------------------
+* Packages
+
+.play src/packages.go 
+
+Every Go program is made up of packages.
+
+Imports can be grouped into a paranthesized import statement.
+
+Programs start running in package `main`.
+
+
+#-------------------------------------------------------------------------------
+* Exported names
+
+
+.play -edit src/exported.go
+
+A name is exported if it begins with a capital letter.
+
+When importing a package, you can refer only to its exported names.
+
+: Unexported names are not accessible from outside the package.
+
+#-------------------------------------------------------------------------------
+* Functions
+
+: Here, `add` takes two parameters of type `int`.
+
+.play -edit src/functions.go
+
+Functions can take zero or more arguments.
+
+Notice that the type comes _after_ the variable name.
+
+: Where do you think the return value's type will be declared?
+
+
+#-------------------------------------------------------------------------------
+* Functions
+
+.code -edit src/functions02.go /^func add/,/^}/
+
+: -
+
+.code -edit src/functions02.go /^func swap/,/^}/
+
+If multiple arguments are of the same type, it must only be specified once.
+
+Functions can return any number of results.
+
+
+
+#-------------------------------------------------------------------------------
+* Higher-Order Functions
+
+.play -edit src/function-values.go
+
+Functions are values too. 
+
+: They may be used as function arguments and return values.
+ 
+
+
+
+#-------------------------------------------------------------------------------
+* Variables
+
+.play src/variablesX.go
+
+The `var` statement declares a list of variables (at package or function level).
+
+: the type is last. 
+
+Variable declarations can include initializers (one per variable).
+
+Inside a function, the short assignment statement `:=` can be used. 
+
+: in place of a `var` declaration with implicit type.
+: Outside a function, every statement begins with a keyword (`var`, `func`, etc)
+: and so the := construct is not available
+
+: For more information, see: [[https://blog.golang.org/gos-declaration-syntax][Go's declaration syntax]]
+
+
+#-------------------------------------------------------------------------------
+* Zero values
+
+.play -edit src/zero.go
+
+Variables declared without an explicit initial value are given their zero value.
+
+
+#-------------------------------------------------------------------------------
+* Types
+
+ // Basic types
+ bool
+ 
+ string
+
+ int, int8, int16, int32, int64
+ uint, uint8, uint16, uint32, uint64, uintptr
+
+ byte // alias for uint8
+ rune // alias for int32 (Unicode point)
+
+ float32, float64
+
+ complex64, complex128
+
+: -
+
+ // Pointers
+ *bool, *string, *int, *int8, ...
+
+
+: but no pointer arithmetics
+
+
+#-------------------------------------------------------------------------------
+* For-Loop
+
+
+ for i := 0; i < 100; i++ {
+ }
+
+: while
+
+ // When neither init- nor post-statements are present, semicolons can be omitted
+ for isEven(x) {
+ }
+
+
+: bla
+
+
+ // Without the condition-expression `for` loops forever 
+ for {
+ }
+
+: To loop forever, the condition expression can be omitted:
+: (if no break statement is reached)
+
+Go has only one looping construct, the `for` loop.
+
+: for init; condition; post {
+: }
+
+: consisting of three components separated by semicolons
+
+: init statement        (executed before the first iteration)
+: condition expression  (eval. before every iteration)
+: post statement        (exec. at end of every iteration)
+
+: NOTE: there are no paranthesis surrounding the three components
+: but braces { } are always required
+
+Init-statement, condition-expression, and post-statement are optional
+
+
+#-------------------------------------------------------------------------------
+* If-Statement
+
+: short-statement, `else` `if`- and `else`-branch are optional
+
+.play -edit src/if01.go
+
+
+#-------------------------------------------------------------------------------
+* Switch
+
+.play -edit src/switch01.go
+
+A case body breaks automatically, unless it ends with a `fallthrough` statement.
+
+
+#-------------------------------------------------------------------------------
+* Arrays and Slices
+
+.play -edit src/slices01.go
+
+An `array` has a fixed size.
+
+A `slice` is a dynamically-sized, flexible view into the elements of an `array`.
+
+
+: Slices are like references to arrays
+
+: A slice does not store any data, it just describes a section of an underlying array.
+
+: Changing the elements of a slice modifies the corresponding elements of its underlying array. 
+
+: Zero value of slice is nil
+
+
+##-------------------------------------------------------------------------------
+#* Slice internals
+#
+#: TODO: fix images to fit the example
+#
+#.image img/go-slices-usage-and-internals_slice-struct.png
+#
+# var s []int = primes[2:4]
+#
+#.image img/go-slices-usage-and-internals_slice-2.png
+
+
+#-------------------------------------------------------------------------------
+* Creating a Slice with Make
+
+.play -edit src/slices02.go
+
+`make` allocates a zeroed array and returns a slice that refers to that array.
+
+
+#-------------------------------------------------------------------------------
+* Appending to a Slice
+
+.play -edit src/slices03.go
+
+: func append(s []T, vs ...T) []T
+
+: If the backing array of s is too small to fit all the given values a bigger array will be allocated.
+: nil is slices zero value, can be appended
+
+`append` takes a slice `s` of type `T`, and `T` values to append to the slice.
+
+
+#-------------------------------------------------------------------------------
+* Maps
+
+.play -edit src/maps01.go
+
+A map maps keys to values.
+
+: `make` returns a map of the given type, initialized and ready to use.
+: Zero value of map is nil
+: nil map has no keys, nor can keys be added
+
+
+#-------------------------------------------------------------------------------
+* Range
+
+.play -edit src/range01.go
+
+The `range` form of the `for` loop iterates over a slice or map.
+
+: two values are returned for each iteration
+: index, value  (slice)
+: or
+: key, value    (map)
+
+
+##-------------------------------------------------------------------------------
+#* Missing
+#
+#- Go constants (`const`)
+#- Defering function calls (`defer`)
+#- `panic`, `recover`
+
+
+#-------------------------------------------------------------------------------
+#* Exercise: Pandigital Formulas
+#
+#Evaluate the following expressions:
+#
+#1. (1 + 9^(-4)^(6*7))^3^2^85 // ~=e
+#2. 2^5^(-4) - .6 - (.3^9/7)^.8^.1 // ~=pi
+
+
+#-------------------------------------------------------------------------------
+* Exercise: Fibonacci closure
+
+: Let's have some fun with functions.
+: Implement a `fibonacci` function that returns a function (a closure) that 
+: returns successive fibonacci numbers (0,1,1,2,3,5,...).
+
+.play -edit src/fib.go
+
+#-------------------------------------------------------------------------------
+* Exercise: Exponential function
+
+ // Exp computes the exponential function e^x
+ Exp(x, epsilon float64) float64 {
+     // TODO: IMPLEMENT
+ }
+
+: -
+
+ // You may use the following sum to approximate the exponential function:
+ // Stop when two consecutive sums differ by less than epsilon.
+        ∞ 
+ e^x =  Σ (x^n)/n!
+       n=0
+
+
+
+################################################################################
+* Session 02: Interfaces
+
+#-------------------------------------------------------------------------------
+* Interfaces
+
+"_Go's_most_distinctive_and_powerful_feature._" - Rob Pike
+
+"_If_I_could_export_one_feature_of_Go_into_other_languages,_it_would_be_interfaces._" - Ross Cox
+
+.image img/the-thinker-pd.jpg 350 _
+
+.caption *OK...*BUT*WHY?*
+
+
+#-------------------------------------------------------------------------------
+* Structs
+
+.play -edit src/struct01.go
+
+A `struct` is a collection of fields (and a `type` declaration does what you'd expect.)
+
+: struct fields are accessed using a dot
+: struct fields can be accessed through struct pointers
+
+#-------------------------------------------------------------------------------
+* Methods
+
+.play -edit src/method01.go /type/,
+
+A `method` is a function with a special _receiver_ argument.
+
+: The receiver appears in its own argument list between the `func` keyword and the method name.
+: e.g. "Abs method has a receiver of type Vertex named v."
+: You can declare methods on other non-struct types as well.
+: You can declare methods with pointer receivers.
+
+#-------------------------------------------------------------------------------
+* Methods with pointer receiver
+
+.play -edit src/method02.go /type/,
+
+: try removing the * from the declaration of the Scale function on line 16 and 
+: observe how the program's behavior changes.
+: When to use a pointer receiver
+: 1. need to modify the value the receiver points to
+: 2. avoid copying the value on each method call
+: In general, all methods on a given type should have either value or pointer 
+: receivers, but not a mixture of both.
+
+
+#-------------------------------------------------------------------------------
+* Interfaces
+
+.code -edit src/interfaces-abser.go /type/,/^}/
+.play -edit src/interfaces-abser.go /func main/,
+
+
+An _interface_type_ is defined as a set of method signatures.
+
+A value of interface type can hold any value that implements those methods.
+
+*Types*implicitly*satisfy*an*interface*if*they*implement*all*required*methods.*
+
+
+
+#-------------------------------------------------------------------------------
+* Type switch
+
+.code -edit src/interfaces-typeswitch.go /type Stringer/,/^}/
+
+.code -edit src/interfaces-typeswitch.go /func ToString/,/^}/
+
+Check dynamically whether a particular interface value has an additional method.
+
+: Interfaces aren't restricted to static checking, though. 
+: The value any has static type interface{}, meaning no guarantee of any methods
+: at all: it could contain any type. The “comma ok” assignment inside the if
+: statement asks whether it is possible to convert any to an interface value of
+: type Stringer, which has the method String. If so, the body of that statement
+: calls the method to obtain a string to return. Otherwise, the switch picks off a
+: few basic types before giving up. 
+: This is basically a stripped down version of what the fmt package does.
+
+#-------------------------------------------------------------------------------
+* Example
+
+.play -edit src/interfaces-typeswitch.go /func main/,
+
+`time.Duration` satisfies `Stringer`. 
+
+Even though package `time` does not know about `Stringer`.
+
+ func (d Duration) String() string { ... }  // package time
+
+[[http://golang.org/pkg/time/#Duration]]
+
+: emphasize: NO IMPLEMENTS declarations -> Key difference to java, c#, etc.
+: its not ok if using time implies other package dependencies like fmt
+: recognize patterns (e.g. in stl) -> write interface later that captures it
+
+
+#-------------------------------------------------------------------------------
+* fmt.Stringer
+
+.play -edit src/interfaces-fmtstringer.go /func main/,
+
+We don't need `ToString`. `fmt.Println` and `fmt.Printf` work similarly.
+
+ type Stringer interface {  // package fmt
+     String() string
+ }
+
+: -
+
+[[http://golang.org/pkg/fmt/#Stringer]]
+
+
+##-------------------------------------------------------------------------------
+#* Example
+#
+#.code -edit src/interfaces-readcloser.go /type/,/^}/
+#
+#.code -edit src/interfaces-readcloser.go /func/,/^}/
+#
+#: The code that calls ReadAndClose can pass a value of any type as long as it
+#: has Read and Close methods with the right signatures. 
+#: Unlike in languages like Python, if you pass a value with the wrong type, you
+#: get an error at compile time, not run time
+#
+##-------------------------------------------------------------------------------
+#* Example
+#
+#.code -edit src/interfaces-readcloser.go /type MyByte/,/func \(rc MyByte\) Close/
+#
+#.play -edit src/interfaces-readcloser.go /func main/,
+#
+#A value of type `MyByte` can be passed to `ReadAndClose` even though
+#the program never says that `MyByte` intends to implement `ReadCloser`. 
+#
+#: There's no need: the runtime can see that MyByte has
+#: Read and Close methods, so it implements ReadCloser, even if the author of MyByte has never
+#: heard of ReadCloser.  
+
+
+##-------------------------------------------------------------------------------
+#* Printing Weekdays
+#
+#.play -edit src/stringerinterface01.go
+#
+#
+##-------------------------------------------------------------------------------
+#* time.Weekday
+#
+# package time
+#
+#: -
+#
+# // A Weekday specifies ...
+# type Weekday int
+#
+# const (
+#    Sunday Weekday = iota
+#    ...
+# )
+#
+#[[http://golang.org/pkg/time/#Weekday]]
+#
+#
+##-------------------------------------------------------------------------------
+#* time.Weekday
+#
+# var days = [...]string{
+#     "Sunday",
+#     ...
+# }
+#
+# // String returns...
+# func (d Weekday) String() string {
+#     return days[d]
+# }
+#
+##-------------------------------------------------------------------------------
+#* time.Duration
+#
+# package time
+#
+#: -
+#
+# // TODO: add comment
+# type Duration int64
+#
+#: -
+#
+# const (
+#    Nanosecond Duration = 1
+#    Microsecond = 1000 * Nanosecond
+#    ...
+# )
+#
+#[[http://golang.org/pkg/time/#Duration]]
+
+ 
+#-------------------------------------------------------------------------------
+* Errors
+
+: There is no exception handling. 
+
+: Functions that might produce an error just declare an additional return value of type `Error`.
+: This is the `Error` interface:
+
+ type error interface {
+     Error() string
+ }
+
+: A function that might return an error:
+
+ func doStuff() (int, error) { ... }
+
+ func main() {
+     res, err := doStuff()
+     if error != nil {
+         // handle error
+     } else {
+         // all is good, use result
+     }
+ }
+
+Go code uses `error` values to indicate an abnormal state.
+
+
+#-------------------------------------------------------------------------------
+* Errors
+
+
+ e1 := errors.New("This is an error")
+
+: -
+
+ e2 := fmt.Errorf("IndexError: %d", i)
+
+: -
+
+ // Implementing the Error interface on a custom type
+ type HTTPError int
+
+ func (h HTTPError) Error() string { return fmt.Sprintf("Error. Code: %d\n", int(h)) }
+
+ e3 := HTTPError(403)
+
+There are at least three ways to create your own `errors`.
+
+
+#-------------------------------------------------------------------------------
+* Embedding types
+
+.play src/embedding.go
+
+Embed types within a struct to "borrow" pieces of an implementation.
+
+: Go does not provide a type-driven notion of subclassing.
+: Embedding differs from subclassing: 
+: when embedded methods are invoked, the receiver is the inner type.
+
+
+#-------------------------------------------------------------------------------
+* Embedding interfaces
+
+ type Reader interface {
+     Read(p []byte) (n int, err error)
+ }
+
+ type Writer interface {
+     Write(p []byte) (n int, err error)
+ }
+
+: -
+
+ // ReadWriter is the interface that combines the Reader and Writer interfaces.
+ type ReadWriter interface {
+     Reader
+     Writer
+ }
+
+
+#-------------------------------------------------------------------------------
+* Hello, net
+
+.play -edit src/netwriter.go
+
+: error checking omitted for brevity.
+
+
+#-------------------------------------------------------------------------------
+* Hello, net
+
+We just used `Fprintln` to write to a net connection.
+
+That's because a `Fprintln` writes to an `io.Writer`, and `net.Conn` is an `io.Writer`.
+
+ func Fprintln(w io.Writer, a ...interface{}) (n int, err error)  // package fmt
+
+: -
+
+ type Writer interface {                                          // package io
+     Write(p []byte) (n int, err error)
+ }
+
+: - 
+
+ type Conn interface {                                            // package net
+     Read(b []byte) (n int, err error)
+     Write(b []byte) (n int, err error)
+     Close() error
+     ... 
+ }
+
+
+
+
+#-------------------------------------------------------------------------------
+* Summary
+
+Go's interfaces are satisfied implicitly. 
+
+: This makes them feel lightweight and engaging to use.
+
+Enables true component architectures. 
+
+: Profound effect on library design.
+
+: Prime examples are io.Reader and io.Writer, generalizations of the Unix pipe idea.
+
+Implicit conversions are checked at compile time.
+
+Explicit interface-to-interface conversions can inquire about method sets at run time.
+
+: - NO IMPLEMENTS -> Key difference to java, c#, etc.
+: its not ok if using time implies other package dependencies like fmt
+: recognize patterns (e.g. in stl) -> write interface later that captures it
+
+: Go's interfaces feel lightweight.
+
+#-------------------------------------------------------------------------------
+* Exercise: Sortable ByteSlice
+
+For a new type `ByteSlice`, implement the methods needed to satisfy sort.Interface.
+
+# type Interface interface {
+#    Len() int                 // Len is the number of elements in the collection
+#    Less(i, j int) bool       // Less reports whether element at i sorts before element at j
+#    Swap(i, j int)            // Swap swaps element i and j
+# }
+#
+#: -
+#
+# func Sort(data Interface)
+#
+#: -
+
+.play -edit src/ex-sortable.go
+
+
+#-------------------------------------------------------------------------------
+* Exercise: IntReader
+
+ convert int to string: strconv.Itoa(int) string
+ convert string to byte-slice: []byte(string)
+
+
+################################################################################
+* Session 03: Concurrency
+
+#* 
+#
+#.image img/arrival-concurrency1.png 520 _
+
+#-------------------------------------------------------------------------------
+* Concurrency
+
+Concurrency is the ability to write your program as independently executing pieces.
+
+Concurrency is not parallelism!
+
+But
+
+- What are _goroutines_? 
+- What are _channels_?
+- What's a _select-statement_?
+
+: What does "_Don't_communicate_by_sharing_memory,_share_memory_by_communicating_" mean?
+
+#-------------------------------------------------------------------------------
+* Goroutines
+
+.play -edit src/marcopolo01.go
+
+A goroutine is an independently executing function, launched by a `go` statement.
+
+Goroutines are multiplexed dynamically onto threads as needed to keep all the goroutines running.
+
+: Thinking of them as very cheap threads won't be far off.
+: It has its own call stack, which grows and shrinks as required.
+: It's very cheap. It's practical to have thousands, even hundreds of thousands of goroutines.
+: It's not a thread.
+: There might be only one thread in a program with thousands of goroutines.
+
+
+#-------------------------------------------------------------------------------
+* Channels
+
+A channel in Go provides a connection between two goroutines, allowing them to communicate.
+
+ // Declaring and initializing.
+ var c chan int
+ c = make(chan int)
+ // or
+ c := make(chan int) // HL
+
+: -
+
+ // Sending on a channel.
+ c <- 1
+
+: -
+
+ // Receiving from a channel.
+ // The "arrow" indicates the direction of data flow.
+ value = <-c
+
+
+##-------------------------------------------------------------------------------
+#* Channels
+#
+#_Sends_ (chan <-) are only accepted if there is a corresponding _receive_ (<- chan) ready to receive the sent value.
+#
+#.image img/channel-unbuffered.png 400 _
+##.caption [[https://www.goinggo.net/2014/02/the-nature-of-channels-in-go.html][Source: goingo.net]]
+
+
+#-------------------------------------------------------------------------------
+* Communicating Goroutines
+
+: using channels
+
+.play -edit src/marcopolo02.go /func say/,
+
+#-------------------------------------------------------------------------------
+* Select
+
+ select {
+     case v1 := <-c1:
+        fmt.Printf("recv %v from channel c1", v1)
+     case v2 := <-c2:
+        fmt.Printf("recv %v from channel c2", v2)
+     case c3 <- 42:
+        fmt.Printf("sent %v to channel c3", 42)
+     default:
+        fmt.Println("no communication")
+ }
+
+`select` works like a `switch` where each case is a communication.
+
+`select` blocks until one communication can proceed, which then does.
+
+A default clause, if present, executes immediately if no channel is ready.
+
+: - All channels are evaluated
+: - If multiple can proceed, select chooses pseudo-randomly
+
+#-------------------------------------------------------------------------------
+* Communicating Goroutines
+
+: using select
+
+.play -edit src/marcopolo02-2.go /func say/,
+
+#-------------------------------------------------------------------------------
+* Concurrency Patterns
+
+
+##-------------------------------------------------------------------------------
+#* Buffered Channels
+#
+#: By default channels are _unbuffered_. 
+#
+#: Buffered channels have capacity and therefore can behave a bit differently. 
+#
+#_Buffered_channels_ accept a limited number of values without a corresponding receiver for those values.
+#
+#.play -edit src/bufferedchan.go
+#
+##-------------------------------------------------------------------------------
+#* Buffered Channels
+#_Sends_ (chan <-) are only accepted if there is room in the channel. 
+#
+#: The goroutine can move on immediately. Otherwise the goroutine waits for room.
+#
+#_Receives_ (<- chan) are accepted whenever the buffered channel is non-empty.
+#
+#: The channel will lock the goroutine and make it wait until a resource has been sent.
+#
+#.image img/channel-buffered.png
+#.caption [[https://www.goinggo.net/2014/02/the-nature-of-channels-in-go.html][Source: goingo.net]]
+#
+##-------------------------------------------------------------------------------
+#* Communicating Goroutines (Buffered)
+#
+#: using buffered channels
+#
+#.play -edit src/agents.go
+
+
+#-------------------------------------------------------------------------------
+* Generator
+
+.play -edit src/generator.go /func say/,
+
+
+#-------------------------------------------------------------------------------
+* Multiplexer
+
+.code -edit src/marcopolo03.go /func fanIn/,/^}/
+
+.play -edit src/marcopolo03.go /func main/,
+
+
+#-------------------------------------------------------------------------------
+* Daisy-chain
+
+.play -edit src/daisychain.go /func f/,
+
+
+#-------------------------------------------------------------------------------
+* Quit chan
+
+.play -edit src/quitchan.go /func f/,
+
+
+
+#-------------------------------------------------------------------------------
+#* Disable select case using nil chan
+#
+# ...
+
+##-------------------------------------------------------------------------------
+#* Generator-"Pattern"
+#
+# package main
+# import ...
+#
+#.play -edit src/concurrent/phdstudents.go /func/,
+
+#* Go is about Concurrency
+#
+#- provides CSP like concurrency primitives
+#- lightweigth threads (go-routines)
+#- typed thread-safe communication and synchronization (channels)
+#
+#=> comprehensible concurrent code
+#
+#
+#* Communicate by sharing memory
+#
+#- Concurrent use of shared resources is a source of indeterminacy, leading to deadlocks or starvation.
+#- Implementing correct access to shared variables is difficult.
+#- Callbacks and thread-pools make code hard to read.
+#
+#=> Go encourages a different approach
+#
+#
+#* Share by communicating
+#
+# "Do not communicate by sharing memory; instead, share memory by communicating."
+#
+#- Never actually share values by separate threads
+#- Instead, pass shared values around on `channels`
+#- Only one go-routine can access the value at any given time
+#- Data races cannot occur, *by*design*
+
+
+#-------------------------------------------------------------------------------
+* So...
+
+- _Goroutines_ are independently executing functions, launched by `go` statements.
+- _Channels_ are typed conduits enabling goroutines to communicate.
+- _Select_ is a control structure unique to concurrency.
+
+
+
+###############################################################################
+* Exercise: Dining Philosophers
+
+.image img/dining-philosophers-cc3.png 500 _
+
+* Exercise: Dining Philosophers
+
+ func dine(name string, left, right chan bool) {
+     // TODO: IMPLEMENT
+ }
+
+.play src/philosophers02.go /func main/,
+
+###############################################################################
+* Conclusion
+
+Go is an *efficient*, *compiled* programming language that feels *lightweight* and *pleasant*
+
+- Implicit satisfaction of interfaces
+- Composition instead of inheritance
+- Struct embedding
+- Concurrency approach: _share_memory_by_communicating_
+
+
+################################################################################
+#* Go's Declaration Syntax
+#
+#C++
+#
+# char *str[10];
+#
+#Go
+#
+# str [10]*byte
+#
+#
+#* Go's Declaration Syntax
+#
+#C++
+#
+# Clockwise/Spiral Rule
+#      +-------+
+#      | +-+   |
+#      | ^ |   |
+# char *str[10];
+#  ^   ^   |   |
+#  |   +---+   |
+#  +-----------+
+#
+#
+#Go
+#
+# Left to right
+# +-----------> 
+# str [10]*byte
+ 
+##############################################################################
+
+* References
+
+Images (in order of occurence):
+
+- [[https://www.flickr.com/photos/si-mocs/31131827236][Language is the first weapon drawn in conflict (by _Simon_Liu_)]] - [[https://creativecommons.org/licenses/by-nc-sa/2.0/][CC BY-NC-SA 2.0]]
+
+- [[https://pixabay.com/en/the-thinker-rodin-paris-sculpture-692959/][The Thinker]] - CC0 Public Domain
+#Image: [[https://cdn.pixabay.com/photo/2015/03/26/15/55/the-thinker-692959_960_720.jpg]]
+
+- [[https://de.wikipedia.org/wiki/Philosophenproblem#/media/File:An_illustration_of_the_dining_philosophers_problem.png][An illustration of the dining philosophers problem (by _Benjamin_D._Esham_)]] - [[https://creativecommons.org/licenses/by-sa/3.0/deed.de][CC BY-SA 3.0]]
+
