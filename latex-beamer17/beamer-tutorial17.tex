@@ -1,0 +1,561 @@
+\documentclass[xcolor=x11names, xcolor=table]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{minted}
+\usepackage{graphicx}
+%\usetheme{ufcd}
+\definecolor{bgg}{rgb}{0.95,0.95,0.95}
+\colorlet{bggg}{gray!30}
+\setbeamercolor{block body}{bg=bgg,fg=black}
+\setbeamercolor{block title}{bg=bggg,fg=black}
+% the Madrid theme as custom theme:
+%\usecolortheme{whale} % outer color
+%\usecolortheme{orchid} % inner color
+%\useinnertheme[shadow]{rounded}
+%\useoutertheme{infolines}
+%\usefonttheme{default}
+
+
+%==============================================================================%
+\begin{document}
+
+\author{Tim Schulte}
+\institute[Uni Freiburg]{
+    Albert-Ludwigs-Universität Freiburg\\
+    Grundlagen der Künstlichen Intelligenz
+}
+\title{The \LaTeX\ Beamer Class}
+\date{\today}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+
+\section{Introduction}
+\subsection{Introduction}
+% ------------------------------------------------------------------------------
+\begin{frame}{Introduction}
+    \begin{itemize}
+            \item
+    The \LaTeX\ beamer class enables the creation of presentations, handouts and
+    articles from the same source
+        \item Slides of size 128x96 mm
+        \item \emph{Overlay} and \emph{theme} support
+        \item Regular \LaTeX\ commands work
+    \end{itemize}
+\end{frame}
+
+
+\section{Basics}
+\subsection{Basics}
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{The first slide}
+    \begin{block}{slide.tex}
+        \inputminted{latex}{tex/first-slide.tex}
+    \end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Beamer class options}
+    \begin{minted}[autogobble]{latex}
+        \documentclass[options]{beamer}
+    \end{minted}
+
+    \begin{block}{Options}
+    \begin{itemize}
+        \item \texttt{8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, 20pt}
+        \item \texttt{draft} -- no graphics, footlines, \dots
+        \item \texttt{handout} -- no overlays
+    \end{itemize}
+    \end{block}
+
+    The \texttt{beamer} class automatically loads packages \texttt{xcolor,
+    amsmath, amsthm, calc, geometry, hyperref, extsizes}, and others
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Frames}
+    \begin{minted}[autogobble]{latex}
+        \begin{frame}[options]{Title}{Subtitle}
+        ...
+        \end{frame}
+    \end{minted}
+
+    \begin{block}{Options}
+    \vspace{.5em}
+    \begin{tabular}{ll}
+        \texttt{plain} & no headlines, footlines, sidebars\\
+        \texttt{squeeze} & squeeze all vertical space\\
+        \texttt{shrink=0..100} & shrink everything by $n$ percent\\
+        \texttt{b, c, t} & vertically align at bottom, center, top\\
+        \texttt{fragile} & \alert{required} when using macros (like
+        \texttt{verbatim})\\
+        \texttt{allowframebreaks} & auto-create new frames when necessary\\
+        %if there is too much content to be displayed on one\\
+        \texttt{label=...} & label frame for reuse with
+        \mintinline{latex}{\againframe}
+    \end{tabular}
+
+    \vspace{.5em}
+    Subtitle and title are optional
+    \end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}{Titlepage}
+    \begin{block}{slide-titlepage.tex}
+        \inputminted{latex}{tex/slide-titlepage.tex}
+    \end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Environments}
+\begin{itemize}
+    \item Create bullet points with \texttt{itemize} and \texttt{enumerate}
+    environments
+    \item Include graphics with \texttt{figure} environment
+    \item Include tables with \texttt{table} environment
+    \item Include unprocessed text with \texttt{verbatim} environment
+    \item Include math with \verb+\(...\)+ or \verb+\[...\]+ environments
+\end{itemize}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Blocks}
+    Emphasize important information using \texttt{block}, \texttt{alertblock},
+    or \texttt{exampleblock} environments.
+
+
+    \begin{columns}
+    \column{.45\textwidth}
+    \begin{minted}[autogobble]{latex}
+        \begin{block}{title}
+        ...
+        \end{block}
+    \end{minted}
+    \column{.45\textwidth}
+    \begin{block}{This is a Block}
+    This is important information
+    \end{block}
+    \end{columns}
+
+    \begin{columns}
+    \column{.45\textwidth}
+    \begin{minted}[autogobble]{latex}
+        \begin{alertblock}{title}
+        ...
+        \end{alertblock}
+    \end{minted}
+    \column{.45\textwidth}
+    \begin{alertblock}{This is an Alert block}
+    This is an important alert
+    \end{alertblock}
+    \end{columns}
+
+    %\begin{columns}
+    %\column{.45\textwidth}
+    %\begin{minted}[autogobble]{latex}
+    %    \begin{exampleblock}{title}
+    %    ...
+    %    \end{exampleblock}
+    %\end{minted}
+    %\column{.45\textwidth}
+    %\begin{exampleblock}{This is an Example block}
+    %This is an example
+    %\end{exampleblock}
+    %\end{columns}
+
+    \vspace{1em}
+    Appearance of different block types is defined by style templates.
+    Title is mandatory. Use \mintinline{latex}{\begin{block}{}} for empty title.
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}<0>{beamercolorbox, beamerboxesrounded}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}<0>{scalebox, resizebox}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile, c]{Columns}
+%\scalebox{.8}{
+\begin{columns}[c]
+\column{.55\linewidth}
+\begin{minted}[autogobble]{latex}
+    \begin{columns}[c] %  t,b,h
+        \column{.55\textwidth}
+        ...
+        \column{.35\textwidth}
+        \includegraphics{gopher.png}
+    \end{columns}
+\end{minted}
+\column{.35\linewidth}
+    \includegraphics[width=.8\linewidth]{img/gopher.png}
+\end{columns}
+%}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Animations}
+%\setbeamercovered{transparent}
+Use the \mintinline{latex}{\pause} command to make items appear on a slide
+
+\vspace{1em}
+\begin{columns}
+\column{.45\textwidth}
+\begin{minted}[autogobble]{latex}
+    We start our discussion
+    with some concepts.
+    \pause
+    The first concept we
+    introduce originates
+    with Erd\H os.
+\end{minted}
+\column{.45\textwidth}
+    \begin{overlayarea}{.9\textwidth}{5em}
+    We start our discussion
+    with some concepts.
+    \only<2>
+    {
+    The first concept we
+    introduce originates
+    with Erd\H os.
+    }
+    \end{overlayarea}
+\end{columns}
+
+\vspace{2em}
+Use \mintinline{latex}{\setbeamercovered{transparent}} or
+\mintinline{latex}{\setbeamercovered{dynamic}} to show covered parts
+
+\end{frame}
+
+
+%TODO: handout mode
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Animations}
+    \begin{columns}
+    \column{.45\textwidth}
+        \begin{minted}[autogobble]{latex}
+            \begin{itemize}
+                \item<1-> first
+                \item<2-> second
+                \item<3-> third
+            \end{itemize}
+        \end{minted}
+    \column{.45\textwidth}
+        \begin{minted}[autogobble]{latex}
+            \begin{itemize}[<+->]
+                \item first
+                \item second
+                \item third
+            \end{itemize}
+        \end{minted}
+    \end{columns}
+
+    \vspace{2em}
+    Explicitly set up individual items to appear on a particular slide within
+    the frame using \mintinline{latex}{<x-y>} syntax (left), or use shorthand
+    (right) to auto-increment.
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Animations}
+    Most environments allow overlay specification
+    \begin{minted}[autogobble]{latex}
+        \begin{itemize}<1->
+            \item ...
+        \end{itemize}
+    \end{minted}
+
+    \begin{minted}[autogobble]{latex}
+        \begin{block}<2>
+            % only visible from second layer onwards
+        \end{block}
+    \end{minted}
+
+    Many commands allow them, too
+
+    \begin{minted}[autogobble]{latex}
+        \textbf<3-4>{bold}
+        \includegraphics<1,2>[scale=0.3]{gopher}
+        ...
+    \end{minted}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Animation}
+Other useful commands to create animation/overlays
+
+\begin{minted}[autogobble]{latex}
+    \only<x-y>{ only visible on slide x to y }
+\end{minted}
+\begin{minted}[autogobble]{latex}
+    \alt<x-y>{ visible x to y }{ visible else }
+\end{minted}
+
+
+The \texttt{overlayarea} environment prevents \emph{wobbling} slides when using
+\mintinline{latex}{\only, \alt,} \dots
+
+\begin{minted}[autogobble]{latex}
+    \begin{overlayarea}{.9\textwidth}{5em}
+        ...
+    \end{overlayarea}
+\end{minted}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Multimedia}
+    Embedding videos is possible, using the \texttt{multimedia} package
+
+    \vspace{1em}
+    \begin{minted}[autogobble]{latex}
+        \usepackage{multimedia}
+        ...
+        \movie[width=6cm, height=6cm, start=5s, duration=6s]
+        {\includegraphics{image}}{movie.avi}
+    \end{minted}
+
+    \vspace{1em}
+    But it might not work (depending on the PDF viewer)
+\end{frame}
+
+
+\section{Structure}
+\subsection{Structure}
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Structuring}
+    %As in all \LaTeX\ files,
+    It is possible to structure the document using
+    \begin{itemize}
+        \item %
+        \begin{minted}[autogobble]{latex}
+        \section[Section]{My section}
+        \end{minted}
+
+        \item %
+        \begin{minted}[autogobble]{latex}
+        \subsection[Subsection]{My subsection}
+        \end{minted}
+
+        \item %
+        \begin{minted}[autogobble]{latex}
+        \subsubsection[Subsubsection]{My subsubsection}}
+        \end{minted}
+    \end{itemize}
+    before and between frames
+
+    \vspace{.5em}
+    These commands do not generate text on the slides, but appear in the
+    \mintinline{latex}{\tableofcontents}
+
+    \vspace{.5em}
+    In some themes, they appear in the sidebar or headline
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Appendix}
+\begin{minted}[autogobble]{latex}
+    \section{...}
+    \begin{frame} ... \end{frame}
+    \appendix
+    \begin{frame} ... \end{frame}
+\end{minted}
+Everything after \mintinline{latex}{\appendix} does not appear in the ToC
+
+\vspace{.5em}
+However, it affects the page counter
+\end{frame}
+
+
+\begin{frame}[fragile]{Hyperlinks}
+First, add a target
+
+\begin{minted}[autogobble]{latex}
+\hypertarget{foo}{} or \hypertarget<2>{bar}{}
+\end{minted}
+
+Then, link it somewhere else
+\begin{minted}[autogobble]{latex}
+\hyperlink{foo}{\beamergotobutton{go to foo}}
+\end{minted}
+
+\begin{block}{Button types}
+\mintinline{latex}{\beamergotobutton{foo}}\\
+\mintinline{latex}{\beamerskipbutton{bar}}\\
+\mintinline{latex}{\beamerreturnbutton{baz}}
+\end{block}
+\end{frame}
+
+
+\section{Style}
+\subsection{Style}
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Built-in themes}
+    Beamer provides built-in themes % and color-themes% mostly named after cities
+
+    \begin{minted}[autogobble]{latex}
+        \usetheme{theme}
+    \end{minted}
+
+    \begin{block}{Themes}
+    \begin{table}
+    \begin{tabular}{llll}
+        \texttt{default}  & \texttt{Copenhagen} & \texttt{Ilmenau}     & \texttt{Marburg}\\
+        \texttt{Antibes}  & \texttt{Darmstadt}  & \texttt{JuanLesPins} & \texttt{Montpellier}\\
+        \texttt{Bergen}   & \texttt{Dresden}    & \texttt{Luebeck}     & \texttt{PaloAlto}\\
+        \texttt{Berkeley} & \texttt{Frankfurt}  & \texttt{Madrid}      & \dots\\
+    \end{tabular}
+    \end{table}
+    \end{block}
+
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{The DIY approach}
+You can create a custom theme by specifying
+\begin{enumerate}
+    \item a \texttt{colorscheme},
+    \item an \texttt{innertheme},
+    \item an \texttt{outertheme} and
+    \item a \texttt{fonttheme} {\color{darkgray} (not covered here)}
+\end{enumerate}
+separately
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Color theme}
+    Choose a predefined \texttt{colortheme}
+    \begin{minted}[autogobble]{latex}
+        \usecolortheme{colortheme}
+    \end{minted}
+
+    \begin{block}{Color theme}
+    \vspace{1em}
+    \begin{tabular}{lllll}
+        \texttt{default} & \cellcolor{DeepSkyBlue1}\texttt{beetle} &
+        \cellcolor{DeepSkyBlue1}\texttt{dove}     & \cellcolor{magenta}\texttt{orchid} &
+        \cellcolor{orange}\texttt{seahorse}\\
+        \cellcolor{DeepSkyBlue1}\texttt{albatross}  &
+        \cellcolor{DeepSkyBlue1}\texttt{crane}  &
+        \cellcolor{DeepSkyBlue1}\texttt{fly} & \cellcolor{magenta}\texttt{rose}
+        & \cellcolor{orange}\texttt{whale}\\
+        \cellcolor{DeepSkyBlue1}\texttt{beaver}  &
+        \cellcolor{orange}\texttt{dolphin}  & \cellcolor{magenta}\texttt{lily} & \cellcolor{DeepSkyBlue1}\texttt{seagull} & \cellcolor{DeepSkyBlue1}\texttt{wolverine}
+    \end{tabular}
+
+    \vspace{1em}
+    Color themes can be {\color{DeepSkyBlue4} complete}, {\color{magenta} inner} or
+    {\color{orange} outer}
+    \end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Outer theme}
+    Select an \texttt{outertheme}
+
+    \begin{minted}[autogobble]{latex}
+        \useoutertheme{outertheme}
+    \end{minted}
+
+    The outertheme defines the head and footline of each slide
+
+    \begin{block}{Outer themes}
+    \vspace{1em}
+    \begin{tabular}{llll}
+    \texttt{infolines} & \texttt{miniframes} & \texttt{shadow} & \texttt{split}\\
+    \texttt{sidebar} & \texttt{smoothbars} & \texttt{smoothtree} & \texttt{tree}
+    \end{tabular}
+    \end{block}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Inner theme}
+    Select an \texttt{innertheme}
+
+    \begin{minted}[autogobble]{latex}
+        \useinnertheme{innertheme}
+    \end{minted}
+
+    The \texttt{innertheme} defines the appearance of \texttt{blocks},
+    \texttt{enumerations} and other environments \emph{inside} the frame
+
+    \begin{block}{Inner themes}
+    \vspace{.5em}
+    \begin{tabular}{llll}
+    \texttt{rectangles} & \texttt{circles} & \texttt{inmargin} & \texttt{rounded}
+    \end{tabular}
+    \end{block}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Custom theme example}
+
+The Madrid theme can be defined as
+
+\begin{minted}[autogobble]{latex}
+    \usecolortheme{whale}  % outer color
+    \usecolortheme{orchid} % inner color
+    \useinnertheme[shadow]{rounded}
+    \useoutertheme{infolines}
+    \usefonttheme{default}
+\end{minted}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}{The beamer user guide}
+Everything you need to know
+
+\vspace{.5em}
+\url{http://www.math.uni.lodz.pl/~zofiawal/tex/beameruserguide.pdf}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}<0>{}
+% TODO: show
+% - how to comment out blocks using \iffalse ... \fi
+% - how to hide slides using <0>
+% - how to hide them in the handout version only <1| handout:0>
+% - how to resize stuff using resizebox/scalebox
+% - how to customize individual parts (like block background,...)
+% - how to create macro commands
+% - adding notes
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}<0>{}
+\end{frame}
+
+
+% ------------------------------------------------------------------------------
+\begin{frame}<0>{}
+\end{frame}
+
+\end{document}
