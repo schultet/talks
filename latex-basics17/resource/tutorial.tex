@@ -1,0 +1,56 @@
+\documentclass[titlepage]{article}
+\usepackage[
+    backend=biber,
+    bibencoding=utf8,
+    style=numeric % alphabetic,...
+]{biblatex}
+
+\bibliography{mybib}
+
+\title{Ein kleiner \LaTeX\ Guide}
+\author{Tim Schulte}
+\date{\today}
+
+\begin{document}
+\maketitle
+%\tableofcontents  % \tableofcontents generates a table of contents
+
+\begin{abstract}
+\input{lipsum2}
+\end{abstract}
+
+\section{Introduction}
+\input{lipsum1}  % \input inserts the content of the specified file inplace
+
+\section{Background}
+As discussed by Dijkstra \cite{dijkstra}\dots
+and others \cite{nasheq,stackelberg}.
+
+\section[Contribution]{The main contribution}
+
+\subsection{Part A}
+
+    Ms. Bean is \ldots\\
+    Ms.\ Bean is \ldots
+
+    I left at 12:00 P.M. In \ldots\\
+    I left at 12:00 P.M\@. In \ldots
+
+    \LaTeX is fun.\\
+    \LaTeX\ is fun.
+
+
+    $gbfs = 35$\\$\mathit{gbfs} = 35$
+
+\subsubsection{Hypothesis}
+
+\paragraph{Paragraph}
+
+\subparagraph{Subparagraph}
+
+\section{Discussion}
+
+\section{Summary}
+\printbibliography
+%\nocite{*}
+\end{document}

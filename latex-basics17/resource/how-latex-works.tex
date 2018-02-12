@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+\tikzstyle{n} = [thick,draw=gray!30,fill=bgg,align=center,rectangle, minimum width=7em]
+
+\node[n] (A) at (0,0) {document text\\ and commands\\ (\emph{.tex})};
+\node[n] (B) at (0,-3) {formatted\\ document\\ (\emph{.dvi, .pdf, .ps})};
+\node[n] (C) at (0,-5.5) {paper\\ document};
+
+\draw[->, thick] (A) -- node[midway]{compile} (B);
+\draw[->, thick] (B) -- node[midway]{print} (C);
+\draw[->, thick] (B.east) -- +(1,0)-| node[right]{edit} ($(A.east) + (1,0)$) -- (A.east);
+
+
+\node[n, minimum height=12em, anchor=north] (AA) at ($(A.north)+(-6,0)$) {WYSIWYG\\ formatted\\ document};
+\node[n] (CC) at (-6, -5.5) {paper\\ document};
+
+\draw[->, thick] (AA) -- node[midway]{print} (CC);
+\draw[->, thick] ($(AA.east)+(0,-1.5)$) -- ($(AA.east) + (1,-1.5)$)-|
+node[right]{edit} ($(AA.east) + (1,1.5)$) -- ($(AA.east)+(0,1.5)$);
+\end{tikzpicture}

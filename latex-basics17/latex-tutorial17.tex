@@ -1,0 +1,1026 @@
+\documentclass[table]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{url}
+\usepackage{minted}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning,calc}
+
+%\usepackage[table]{xcolor}
+%\usetheme{Rochester}
+%\usetheme{Frankfurt}
+%\usecolortheme{default}
+%\useoutertheme[subsection=false]{smoothbars}
+\definecolor{bgg}{rgb}{0.95,0.95,0.95}
+%\colorlet{bgg}{Hell-Blau!50!white}
+\colorlet{bggg}{gray!30}
+%\definecolor{bggg}{rgb}{0.90,0.90,0.90}
+\setbeamercolor{block body}{bg=bgg,fg=black}
+\setbeamercolor{block title}{bg=bggg,fg=black}
+
+\newcommand{\latex}{\LaTeX\ }
+
+
+\title{\LaTeX\ From The Ground Up}
+\author{Tim Schulte}
+\institute{Albert-Ludwigs-Universität Freiburg\\Grundlagen der Künstlichen Intelligenz}
+\date{9. November 2017}
+
+\begin{document}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}{Table Of Contents}
+    \tableofcontents
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}<presentation:0>{What's \LaTeX ?}
+    \begin{itemize}
+        \item Document preparation system and markup language
+        \item Build on top of the \TeX\ typsetting system % (developed by D. Knuth in 1978)
+        % it is a TeX macro package allowing authors to use TeX easily
+        % uses markup commands and type setting program TeX
+        \item Used to create professional-looking documents % with minimal effort
+        % used for publishing reports, books, scientific documents, etc.
+        %\item Imposes a fundamentally different workflow (compared to WYSIWYG
+        %systems)
+        \item Pronounced ``LAY-tek'' or ``LAH-tek''
+    \end{itemize}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}{Why \LaTeX ?}
+    \begin{center}
+        \textnormal{\latex is a document preparation system and markup language.}
+    \end{center}
+    \begin{itemize}
+        %\item creates professional-looking documents
+        %\item \latex saves formatting time and effort
+        \item \latex takes care of artistic details and layout design
+        %\item Consistent layout, fonts, tables, etc.
+        \item Mathematical formulas are exceptionally well supported
+        \item Complex structures can be generated easily (footnotes, table
+        of contents, list of figures, bibliography, references, etc.)
+        \item Encourages writing well-structured texts, because \latex itself
+        works by specifying structure
+        \item Highly portable and free
+    \end{itemize}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}<presentation:0>[fragile]
+    \begin{center}
+    \includegraphics[width=.5\linewidth]{resource/latex-comic}
+    \end{center}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}<presentation:0>{The Philosophy Behind \latex}
+    Author
+    \begin{itemize}
+        \item Composition and logical structuring of text
+    \end{itemize}
+
+    Typesetter
+    \begin{itemize}
+        \item Choice of font family, should section headings be in bold face or
+        small capitals? Should they be flush left or centered? Should the text
+        be justified or not? Should the notes appear at the foot of the page or
+        at the end? Should the text be set in one column or two? etc. etc.
+    \end{itemize}
+\vspace{1em}
+    \textbf{$\Rightarrow$ Focus on content instead of appearance}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}{How \latex Works}
+    \begin{center}
+        \input{resource/how-latex-works.tex}
+    \end{center}
+    %In typical "WYSIWYG" text processors, such as Microsoft Word or Word Perfect:
+    % - Formatting commands are invisible.
+    % - The file shows pretty much the final result.
+    %LaTeX, on the other hand, is a formatter rather than a text processor:
+    % - The file includes commands that define structure.
+    % - The formatting commands are visible.
+    % - The process requires a compiler to format the final result.
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}<presentation: 0>{Workflow}
+    %First, create a (plain text) file containing regular text and \latex commands
+    %to define the general structure of the document.
+    % \item when writing the user uses plain text instead of formatted text
+    % \item the writer uses markup tagging conventions to define the general structure of the document
+
+    \begin{enumerate}
+        \item Create a (plain text) file
+        \item Edit the file's content % adding regular text and \latex commands to define the general structure of the document
+        \item Compile it to create the document % (as DVI, PDF, PostScript, etc.)
+        \item Display the document % (e.g. using a PDF viewer)
+        \item Repeat 2. - 4.
+    \end{enumerate}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}{Setting Up \latex}
+    \begin{block}{Requirements}
+    \begin{itemize}
+        \item \TeX\ distribution (MikTeX, TeXLive, MacTeX, \dots)
+        \item Editor (TeXStudio, TeXMaker, any plain text editor)
+    \end{itemize}
+    \end{block}
+
+    \begin{block}{Examples}
+    \begin{itemize}
+    \item \textbf{Windows}: TeXLive + TeXStudio
+    \item \textbf{Linux}: TeXLive + Editor (e.g. Gedit, Vim, \dots)
+    \item \textbf{Mac}: MacTeX
+    \item \textbf{Browser}: ShareLaTeX
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{The First Document}
+    \begin{block}{first.tex}
+        \inputminted{latex}{resource/first.tex}
+    \end{block}
+
+    \begin{enumerate}
+        \item Create a new folder and inside it a new text file called \emph{first.tex}
+        \item Add the above lines to the file using a plain text editor
+        \item Compile the document using \emph{pdflatex}
+        \item View document using a PDF viewer
+    \end{enumerate}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{The First Document}
+    \begin{center}
+        \fbox{\includegraphics[page=1,width=.45\paperwidth]{resource/first}}
+    \end{center}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% THE BASICS
+%------------------------------------------------------------------------------
+\section{Basics}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{General Document Structure}
+    \inputminted[bgcolor=bgg]{latex}{resource/first-ann.tex}
+    \vspace{2em}
+    \begin{columns}
+        \column{.5\linewidth}
+        \textbf{Preamble}
+        \begin{itemize}
+            \item commands affecting the whole document
+            \item document class, language, ...
+            \item used packages
+        \end{itemize}
+        \column{.4\linewidth}
+        \textbf{Document body}
+        \begin{itemize}
+            \item document content
+            \item logical structure
+            \item formatting instructions
+        \end{itemize}
+    \end{columns}
+
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Spaces}
+    \begin{columns}
+        \column{.5\linewidth}
+        \begin{minted}[autogobble,bgcolor=bgg]{latex}
+            It does not matter
+            whether you enter one
+            or several     spaces
+            after
+            a    word.
+
+            An empty line starts
+            a new paragraph
+        \end{minted}
+        \column{.5\linewidth}
+            It does not matter
+            whether you enter one
+            or several     spaces
+            after
+            a    word.
+
+            An empty line starts
+            a new paragraph
+    \end{columns}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Special Characters}
+    In \latex some characters are reserved\\
+    %The following symbols are reserved characters that either have a special meaning
+    %under \latex or are not available in all the fonts. If you enter them directly
+    %in your text, they will normally not print, but rather coerce \latex to do
+    %things you did not intend.\\
+    \\
+    \verb|# % ^ & _ { } ~ $ \ |\\
+    \\
+    Insert a backslash before these characters to get the desired result\\
+    \\
+    \verb|\# \% \^{} \& \_ \{ \} \~{} \$ \textbackslash|\\
+    \\
+    Output: \# \% \^{} \& \_ \{ \} \~{} \$ \textbackslash
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Commands}
+    \latex commands are of the form
+
+    \begin{center}
+        \mintinline{latex}{\commandname[opt1,opt2,...]{arg1}{arg2}...}
+    \end{center}
+    Some commands need an arguments given in curly braces \mintinline{latex}{{ }}
+
+    \vspace{.5em}
+    while optional parameters are given in square brackets \mintinline{latex}{[ ]}.
+
+    \vspace{.5em}
+    Examples:
+
+    \vspace{.5em}
+    \begin{minted}[bgcolor=white,autogobble]{latex}
+        \documentclass{article}, {\huge profit}
+    \end{minted}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Environments}
+    Environments specify areas in the document where certain typesetting rules
+    apply.
+
+    \begin{center}
+        \begin{minted}[autogobble,bgcolor=bgg]{latex}
+        \begin{environment}
+        ...
+        \end{environment}
+        \end{minted}
+    \end{center}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Comments}
+    \begin{columns}
+        \column{.5\linewidth}
+        \begin{minted}[autogobble,bgcolor=bgg]{latex}
+        This is an % stupid
+        % Better: instructive <--
+        ex%
+            amp%
+            le.
+        \end{minted}
+        \column{.5\linewidth}
+        This is an % stupid
+        % Better: instructive <----
+        ex%
+        amp%
+        le.
+    \end{columns}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}<presentation:0>[fragile]{Arguments}
+    \begin{block}{Required argument}
+        \begin{itemize}
+            \item Contained in curly braces
+            \item Must be included
+        \end{itemize}
+        Ex.: \mintinline{latex}{\documentclass{article}}
+    \end{block}
+
+    \begin{block}{Optional argument}
+        \begin{itemize}
+            \item Contained in square brackets
+            \item Can be left out
+            \item Gives you more control over the commands
+        \end{itemize}
+        Ex.: \mintinline{latex}{\documentclass[12pt]{article}}
+    \end{block}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% Packages and Document Class
+%------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Document Class}
+    The \emph{document class} specifies the overall layout of your document
+    \begin{center}
+    \mintinline{latex}{\documentclass[options]{class}}
+    \end{center}
+    Use \verb|article| for your paper, \verb|beamer| for your presentation.
+
+    \begin{block}{Classes}
+        \begin{tabular}{lp{20em}}
+        \texttt{article} & for articles in scientific journals, presentations, short reports, program documentation\\
+        \texttt{proc}    & a class for proceedings based on the article class\\
+        \texttt{report}  & for longer reports containing several chapters, small books, Master's and PhD theses\\
+        \texttt{book}    & for real books \\
+        \texttt{letter}  & letters \\
+        \texttt{beamer}  & for presentations \\
+        \end{tabular}
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}{Document Class Options}
+    \begin{block}{Options}
+    \begin{tabular}{p{10em}p{16em}}
+        \texttt{10pt, 11pt, 12pt}        & Size of the main font in the document\\
+        \texttt{a4paper, a5paper, letterpaper, \dots}    & The paper size\\
+        \texttt{titlepage, notitlepage}  & Start a new page after the titlepage?\\
+        \texttt{onecolumn, twocolumn}    & Typeset the documents in one ...
+                                            \newline ... or two columns\\
+        \texttt{landscape}  & Change layout to landscape mode \\
+        \texttt{openright, openany}  & \dots\\
+        \texttt{draft, final}  & \dots\\
+    \end{tabular}
+    \end{block}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Packages}
+    Packages allow further customization. They are included in the preamble of
+    your document
+    \begin{center}
+        \mintinline{latex}{\usepackage[options]{package}}
+    \end{center}
+    Most packages you'll need are already included in the template.
+
+    \begin{block}{Useful packages}
+        graphicx, epsfig, geometry, tikz, fancyhdr, setspace, amsmath, listings,
+        xcolor, url, inputenc, babel, \dots
+    \end{block}
+
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Language Specific Packages}
+    German documents require \emph{umlauts} (äöü)
+
+    \begin{center}
+    \mintinline{latex}{\usepackage[utf8]{inputenc}}
+    \end{center}
+    % TODO: Example (encoding - before & after)
+
+    correct hyphenation
+
+    \begin{center}
+    \mintinline{latex}{\usepackage[german]{babel}}
+    \end{center}
+
+    and (sometimes) special fonts
+
+    \begin{center}
+    \mintinline{latex}{\usepackage[T1]{fontenc}}
+    \end{center}
+
+
+    Other languages are supported likewise.
+    % TODO: Example (hyphenation - before & after)
+    % \parbox{0pt}{\hspace{0pt}Andere übertragen das am besten den Geschwistern.}
+    % \MakeUppercase{ß}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% FORMATTING
+%------------------------------------------------------------------------------
+\section{Text formatting}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Font shapes}
+    %By default \latex uses the \texttt{roman} font family
+
+    \latex provides commands to change the
+    \begin{itemize}
+        \item font family
+
+            \mintinline{latex}{\texttt} (\texttt{typewriter})
+            \mintinline{latex}{\textrm} (\textrm{roman})\\
+            \mintinline{latex}{\textsf} (\textsf{sans serif})
+
+        \item font series
+
+            \mintinline{latex}{\textbf} (\textbf{boldface})
+            \mintinline{latex}{\textmd} (\textmd{medium})
+
+        \item font shape
+
+            \mintinline{latex}{\textup} (\textup{upright})
+            \mintinline{latex}{\textit} (\textit{italic})
+            \mintinline{latex}{\textsl} (\textsl{slanted})
+            \mintinline{latex}{\textsc} ({\rmfamily\scshape small caps})
+    \end{itemize}
+
+
+    You can highlight text using \mintinline{latex}{\emph}.
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Sizing text}
+    \latex provides commands to change the font size
+
+    \begin{table}
+        \begin{flushleft}
+        \begin{tabular}{ll}
+        \mintinline{latex}{\tiny} & {\tiny tiny font}\\
+        \mintinline{latex}{\scriptsize} &{\scriptsize very very small font}\\
+        \mintinline{latex}{\footnotesize} &{\footnotesize very small font}\\
+        \mintinline{latex}{\small} &{\small small font}\\
+        \mintinline{latex}{\normalsize} &{\normalsize normal font}\\
+        \mintinline{latex}{\large} &{\large slightly larger font}\\
+        \mintinline{latex}{\Large} &{\Large very large font}\\
+        \mintinline{latex}{\LARGE} &{\LARGE even larger font}\\
+        \mintinline{latex}{\huge} &{\huge huge font}\\
+        \mintinline{latex}{\Huge} &{\Huge very huge font}\\
+        \end{tabular}
+        \end{flushleft}
+    \end{table}
+
+    Ex.: \mintinline{latex}{\tiny tiny tiny ... \normalsize normal ...}\\
+    Ex.: \mintinline{latex}{{\LARGE large large ...} normal ...}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Line- and page-breaks}
+    %\begin{block}{Margins}
+    %The default: between 1.5 inches and 1.875 inches
+    %Set margins: \mintinline{latex}{\usepackage[margin=0.5in]{geometry}}
+    %\end{block}
+    \begin{itemize}
+        \item Paragraphs are separated by a full blank line
+
+        \item \mintinline{latex}{\\} ends a line explicitly without ending the whole paragraph
+
+        \item \mintinline{latex}{\newpage} (or \mintinline{latex}{\clearpage})
+            ends a page explicitly
+    \end{itemize}
+
+    %\begin{block}{Breaks}
+    %Paragraphs are separated by a blank line.\\
+    %Force a new line using \mintinline{latex}{\\}\\
+    %Force a new page using \mintinline{latex}{\newpage} or \mintinline{latex}{\clearpage}
+    %\end{block}
+
+    %\begin{block}{Other}
+    %Force a space using \mintinline{latex}{~}\\
+    %Add space using \mintinline{latex}{\hspace{1in}} or \mintinline{latex}{\vspace{1in}}\\
+    %Fill space using \mintinline{latex}{\hfill} or \mintinline{latex}{\vfill}
+    %\end{block}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Alignment}
+    Center text using the \texttt{center} environment.
+    \vspace{0.5em}
+
+    Left/right-align text using the \texttt{flushleft}/\texttt{flushright}
+    environment.
+
+    \begin{center}
+    \begin{minted}[autogobble,bgcolor=bgg]{latex}
+        \begin{center|flushright|flushleft}
+        ...
+        \end{center|flushright|flushleft}
+    \end{minted}
+    \end{center}
+
+    %Use the \texttt{quote} environment to left and right indent text
+
+    %\begin{center}
+    %\begin{minted}[autogobble,bgcolor=bgg]{latex}
+    %    \begin{quote} ...  \end{quote}
+    %\end{minted}
+    %\end{center}
+\end{frame}
+
+
+%------------------------------------------------------------------------------
+% DOCUMENT STRUCTURE
+%------------------------------------------------------------------------------
+\section{Structuring}
+
+\subsection{Title page}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Title Page}
+    \begin{block}{titlepage.tex}
+    \inputminted{latex}{resource/first-titlepage.tex}
+    \end{block}
+\end{frame}
+
+\subsection{Abstract}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Abstract}
+    Most research papers have an abstract.
+
+    \begin{block}{abstract.tex}
+    \begin{minted}[autogobble]{latex}
+        \documentclass{article}
+
+        \begin{document}
+        \begin{abstract}
+        Your abstract goes here...
+        \end{abstract}
+        ...
+        \end{document}
+    \end{minted}
+    \end{block}
+    The \verb|abstract| evironment is available for \verb|article|s and
+    \verb|report|s.
+\end{frame}
+
+
+\subsection{Sectioning Commands}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Sectioning Commands}
+    There are 7 levels of depth for defining sections.
+
+    \begin{block}{Sectioning commands and levels}
+    \begin{tabular}{lcl}
+        \mintinline{latex}{\part} & -1 & not in letters\\
+        \mintinline{latex}{\chapter} & 0 & books and reports only\\
+        \mintinline{latex}{\section} & 1 & not in letters\\
+        \mintinline{latex}{\subsection} & 2 & not in letters\\
+        \mintinline{latex}{\subsubsection} & 3 & not in letters\\
+        \mintinline{latex}{\paragraph} & 4 & not in letters\\
+        \mintinline{latex}{\subparagraph} & 5 & not in letters\\
+    \end{tabular}
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Sectioning Commands}
+\begin{columns}
+\column{.6\textwidth}
+        \begin{block}{sectioning.tex}
+            \inputminted[bgcolor=bgg]{latex}{resource/first-sectioning.tex}
+        \end{block}
+\column{.4\textwidth}
+        \includegraphics[page=1,trim=130 540 100 200,width=.7\paperwidth]{resource/first-sectioning}
+\end{columns}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Referencing sections}
+    Add labels to sections to reference them in the text.
+
+    \begin{center}
+        \begin{minted}[autogobble,bgcolor=bgg]{latex}
+            \section{Results}\label{res}
+            ...
+            As seen in Section \ref{res} ...
+        \end{minted}
+    \end{center}
+
+    \latex keeps track of section numbers for you.
+\end{frame}
+
+
+\subsection{Table of contents}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Table Of Contents}
+    A table of contents can be generated with
+    \begin{center}
+        \mintinline{latex}{\tableofcontents}
+    \end{center}
+
+    Titles of sections are added automatically to the table of
+    contents\vspace{.5em}.
+    You can modify the text displayed in the ToC
+    \begin{center}
+    \mintinline{latex}{Ex.: \section[Introduction]{Rapid Introduction To...}}
+    \end{center}
+
+    \begin{block}{Note}
+        ToC entries are recorded when the document is processed.
+        They are reproduced the next time the document is processed.\\
+        $\Rightarrow$ \textbf{Run \emph{pdflatex} twice} to ensure that all ToC
+        pagenumber references are correctly calculated.
+    \end{block}
+\end{frame}
+
+
+\subsection{Modular documents}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Modular documents}
+When writing a book, it makes sense to split the document into multiple
+\texttt{.tex} files.
+
+\vspace{.5em}
+Getting \latex to process multiple files is easy. Just use
+
+\begin{center}
+\mintinline{latex}{\input{filename}}
+\end{center}
+
+somewhere in your document, to put the contents from \texttt{filename.tex} in
+place.
+
+\vspace{.5em}
+Done.
+
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}<presentation:0>{Bibliography}
+    \begin{enumerate}
+        \item Create a Bib\TeX\ file (the database)
+        %\setcounter{enumi}{1}
+        \item Include the \texttt{biblatex} package in the preamble
+            and add the database as a \texttt{bibresource}
+        \item Print the bibliography somewhere in the document body
+    \end{enumerate}
+    %Now you can cite sources from the database throughout your document text
+\end{frame}
+
+
+\subsection{Citations, Bib\TeX}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Bib\TeX\ file format}
+    \begin{block}{mybib.bib}
+    \begin{minted}[autogobble]{latex}
+
+        @article{maxmustermann,
+            author = {Mustermann, Max},
+            title = {Mustermann on topics of interest},
+            journal = {Journal of Mustermann},
+            volume = 46,
+            year = 1993,
+            number = 2,
+            pages = {35--53}
+        }
+        ...
+    \end{minted}
+    \end{block}
+
+    For an indepth description of the database format see\\
+    \scriptsize
+    \url{https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management#BibTeX}
+\end{frame}
+
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{The Bib\LaTeX\ package}
+    \begin{center}
+        \begin{minted}[autogobble,bgcolor=bgg]{latex}
+            % in the preamble
+            \usepackage[bibencoding=utf8,
+                backend=biber, style=numeric]{biblatex}
+            \addbibresource{mybib.bib} % or
+
+            % where the bibliography will be printed
+            \printbibliography
+        \end{minted}
+    \end{center}
+
+    There are other styles, like \verb+alphabetic+, \verb+authoryear+, \dots
+    % \bibliography{mybib} [deprecated]
+    % \nocite{*}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Citations}
+    Add references to your document with
+    \begin{center}
+        \mintinline{latex}{\cite}
+    \end{center}
+
+    \begin{block}{Example}
+        \mintinline{latex}{Redundancy \cite{maxmustermann}}\\
+        \mintinline{latex}{...methodology \cite{entry1, entry2, ...}}
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Bibliography summary}
+    \begin{enumerate}
+        \item Create a Bib\TeX\ file (the database)
+        %\setcounter{enumi}{1}
+        \item Include the \texttt{biblatex} package in the preamble
+            and add the database as a \texttt{bibresource}
+        \item Print the bibliography somewhere in the document body
+    \end{enumerate}
+
+    \begin{block}{Note}
+        To build the bibliography, first compile the document, then
+        generate the necessary \texttt{.bbl} file, and compile the document
+        again.
+        \begin{minted}[autogobble]{bash}
+            > pdflatex <myfile.tex>
+            > biber <myfile>
+            > pdflatex <myfile.tex>
+        \end{minted}
+        If you use an IDE it will probably take care of this for you.
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\iffalse
+\begin{frame}[fragile]{Referencing}
+    \begin{block}{Footnotes}
+    \mintinline{latex}{...telephony\footnote{Phony telephones}}
+    \end{block}
+\end{frame}
+\fi
+
+%------------------------------------------------------------------------------
+% ENVIRONMENTS
+%------------------------------------------------------------------------------
+\section{Environments}
+
+\subsection{Lists}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Lists}
+    There are two basic types of lists (which can also be nested).
+
+    \begin{block}{List environments}
+    \begin{columns}
+    \column{.4\linewidth}
+        \begin{minted}[autogobble]{latex}
+            \begin{itemize}
+                \item This list
+                \item is
+                \item \emph{unordered}
+            \end{itemize}
+        \end{minted}
+    \column{.3\linewidth}
+            \begin{itemize}
+                \item This list
+                \item is
+                \item \emph{unordered}
+            \end{itemize}
+    \end{columns}
+    %\end{block}
+
+    %\begin{block}{Ordered List}
+    \begin{columns}
+    \column{.4\linewidth}
+        \begin{minted}[autogobble]{latex}
+            \begin{enumerate}
+                \item This list
+                \item is
+                \item \emph{ordered}
+            \end{enumerate}
+        \end{minted}
+    \column{.3\linewidth}
+            \begin{enumerate}
+                \item This list
+                \item is
+                \item \emph{ordered}
+            \end{enumerate}
+    \end{columns}
+    \end{block}
+\end{frame}
+
+
+\subsection{Figures}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Figures}
+    Use the \verb|graphicx| package + %in the preamble
+    \verb|figure| environment to embed pictures.
+    \begin{center}
+        \mintinline{latex}{\usepackage{graphicx}}
+    \end{center}
+
+    \begin{block}{Figure environment}
+            \begin{minted}[autogobble,bgcolor=bgg]{latex}
+                \begin{figure}
+                    %\centering
+                    \includegraphics[width=.35\linewidth]{gopher}
+                    \caption{A gopher.}
+                    \label{fig:gopher1}
+                \end{figure}
+            \end{minted}
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\iffalse
+\begin{frame}[fragile]{Figures}{Example}
+    \inputminted[bgcolor=bgg]{latex}{resource/figures.tex}
+\end{frame}
+\fi
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Figure Positioning}
+    %\begin{itemize}
+        %\item
+    \latex may choose to put the picture on a different location\vspace{.5em}.
+            % i.e. the next page, or any other page where it finds sufficient space.
+        %\item
+
+            Adding [h!] behind the figure environment forces the figure to be
+            shown at the exact location in the document.
+            \begin{center}
+            \mintinline{latex}{\begin{figure}[h!]}
+            \end{center}
+    %\end{itemize}
+
+
+    \begin{block}{Positioning flags}
+        \begin{tabular}{ll}
+        \verb|h| (here) & same location\\
+        \verb|t| (top) & top of page\\
+        \verb|b| (bottom) & bottom of page\\
+        \verb|p| (page) & on an extra page\\
+        \verb|!| (override) & will force the specified location
+        \end{tabular}
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}{Tables}
+    Demo\\
+    \\
+    See
+    \url{https://en.wikibooks.org/wiki/LaTeX/Tables}
+\end{frame}
+
+
+\subsection{Verbatim}
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Verbatim}
+To introduce text that won't be interpreted by the compiler, use the
+\texttt{verbatim} environment.\\
+
+\begin{columns}
+    \column{.5\linewidth}
+    \begin{minted}[autogobble,bgcolor=bgg]{latex}
+    \begin{verbatim}
+    The verbatim environment
+      simply reproduces every
+     character you input,
+    including all  s p a c e s!
+    % & { }
+    \end{verbatim}
+    \end{minted}
+    \column{.45\linewidth}
+\begin{verbatim}
+The verbatim environment
+  simply reproduces every
+ character you input,
+including all  s p a c e s!
+% & { }
+\end{verbatim}
+\end{columns}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% MATH
+%------------------------------------------------------------------------------
+\subsection{Math}
+
+%-------------------------------------------------------------------------------
+\begin{frame}{Math Environments}
+    \latex needs to know when text is mathematical.
+
+    \vspace{.5em}
+    There are two main environments
+
+    \vspace{1em}
+    \begin{enumerate}
+        \item Inline formulas (within text)\\
+        \mintinline{latex}{\(...\)}\\
+
+    \item Displayed equations (separated from text)\\
+        \mintinline{latex}{\[...\]}\\
+    \end{enumerate}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Symbols}
+    Mathematics has symbols. Some can be accessed directly
+
+    \begin{center}
+    \mintinline{latex}{+ - = ! / ( ) [ ] < > | ' :}
+    \end{center}
+
+    \vspace{.5em}
+    Others require distinct commands. For instance
+
+    \begin{center}
+    \begin{minted}[autogobble,bgcolor=bgg]{latex}
+    \( \forall x \in X, \quad \exists y \leq \epsilon \)
+    \end{minted}
+    \end{center}
+
+    Produces: \(\forall x \in X, \quad \exists y \leq \epsilon\)
+
+    \vspace{1em}
+    For more advanced mathematic operators see\\
+    \url{https://en.wikibooks.org/wiki/LaTeX/Mathematics}
+    \url{http://www.hostmath.com}
+\end{frame}
+
+%------------------------------------------------------------------------------
+% COMMON MISTAKES
+%------------------------------------------------------------------------------
+\section{Common Mistakes}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Common Mistakes}
+    A space right after a period following a lowercase letter by default ends a
+    sentence and LaTeX inserts an extra whitespace. There are several occasions
+    where you do not want to have the default behaviour.
+
+    \begin{block}{Example}
+        \begin{minted}[autogobble]{latex}
+    Ms. Bean is \ldots\\
+    Ms.\ Bean is \ldots
+
+    I left at 12:00 P.M. In \ldots\\
+    I left at 12:00 P.M\@. In \ldots
+
+    \LaTeX is fun.\\
+    \LaTeX\ is fun.
+        \end{minted}
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Common Mistakes}
+    In math mode variables with more than two characters must be wrapped inside
+    \mintinline{latex}{\mbox or \mathit} environments.\\
+    \begin{block}{Example}
+        \begin{minted}[autogobble]{latex}
+            \[
+            gbfs = 35\\
+            \mathit{gbfs} = 35
+            \]
+        \end{minted}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Common Mistakes}
+    Using the wrong quotation marks.
+
+    \vspace{1em}
+    \begin{columns}
+        \column{.4\linewidth}
+        \begin{minted}[autogobble,bgcolor=bgg]{latex}
+        `American'
+        ``American''
+        ,,German``
+        <<French>>
+        \end{minted}
+        \column{.4\linewidth}
+        `American'\\
+        ``American''\\
+        ,,German``\\
+        <<French>>
+    \end{columns}
+
+    \vspace{1em}
+    For european quoting style use T1 font encoding:
+
+    \mintinline{latex}{\usepackage[T1]{fontenc}}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Common Mistakes}
+    Not using UTF8
+
+    \vspace{0.5em}
+    Just put
+    \begin{center}
+    \mintinline{latex}{\usepackage[utf8]{inputenc}}
+    \end{center}
+    in your preamble and you're done.
+    %  for magic to write foreign characters!
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\begin{frame}[fragile]{Common Mistakes}
+    Not using version management software (git, mercurial, svn)
+\end{frame}
+
+\end{document}
